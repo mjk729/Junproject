@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>로그인</title>
 <link rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
@@ -23,18 +23,20 @@
 <div id="wrap">
     <c:import url="/WEB-INF/jsp/include/header.jsp" />
     <section class="contents d-flex justify-content-center">
-        <div class="image-container">
+        <div class="image-container mr-5">
             <img alt="사진" src="/static/duck.webp" class="mr-5" width="300">
         </div>
         <div class="join-box mt-5 text-center">
         <h1 class="my-5">로그인</h1>
+        	<form id="longinForm">
             <input type="text" placeholder="아이디" class="form-control mt-2 mb-2"
                 id="idInput">
             <input type="password" placeholder="비밀번호"
                 class="form-control mt-2 mb-2" id="passwordInput">
             <a href="/user/join-view" class="">회원가입</a>
-            <button type="button" class="btn btn-secondary btn-block mt-3 mb-3"
+            <button type="submit" class="btn btn-secondary btn-block mt-3 mb-3"
                 id="loginBtn">로그인</button>
+        	</form>
         </div>
     </section>
     <c:import url="/WEB-INF/jsp/include/footer.jsp" />
@@ -51,6 +53,54 @@
     src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
+
+<script>
+$(document).ready(function() {
+	
+	//$("#loginBtn").on("click", function() {
+		
+	$("#loginForm").on("submit", function(e) {
+		
+		// 이벤트 고유의 기능을 취소한다. 
+		e.preventDefault();
+	
+		let id = $("#idInput").val();
+		let password = $("#passwordInput").val();
+		
+		if(id == "") {
+			alert("아이디를 입력하세요");
+			return ;
+		}
+		
+		if(password == "") {
+			alert("비밀번호를 입력하세요");
+			return ;
+		}
+		
+		$.ajax({
+			type:"post"
+			, url:"/user/login"
+			, data:{"loginId":id, "password":password}
+			, success:function(data) {
+				if(data.result == "success") {
+					location.href = "/timeline-view";
+				} else {
+					alert("아이디, 비밀번호를 확인하세요");
+					return ;
+				}
+			}
+			, error:function() {
+				alert("로그인 에러!");
+			}
+		});
+		
+	});
+	
+	
+});
+
+		</script>
+		
 
 </body>
 </html>
