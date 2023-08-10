@@ -28,7 +28,7 @@
         </div>
         <div class="join-box mt-5 text-center">
         <h1 class="my-5">로그인</h1>
-        	<form id="longinForm">
+        	<form id="loginForm">
             <input type="text" placeholder="아이디" class="form-control mt-2 mb-2"
                 id="idInput">
             <input type="password" placeholder="비밀번호"
@@ -83,7 +83,7 @@ $(document).ready(function() {
 			, data:{"loginId":id, "password":password}
 			, success:function(data) {
 				if(data.result == "success") {
-					location.href = "/timeline-view";
+					location.href = "/post/timeline-view";
 				} else {
 					alert("아이디, 비밀번호를 확인하세요");
 					return ;

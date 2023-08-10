@@ -15,7 +15,7 @@
         <div class="d-flex align-items-center justify-content-end">
         <%-- 세션에 userId 값이 있으면 사용자 정보 태그 포함 --%>
         <c:if test="${not empty userId }" >
-            <div class="mr-2">${userName}<a href="/user/logout">로그아웃</a></div>
+            <div class="mr-2">${userName}<a href="/user/logout"> 로그아웃</a></div>
         </c:if>
         </div>
     </div>

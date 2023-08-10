@@ -11,11 +11,22 @@ header{
 	font-style: italic;
 }
 
+.timeline{
+	width:450px;
+	
+}
 
+.image-icon-size {
+	font-size:23px;
+}
 
 .contents > .join-box{
 	width:350px;
 	height:450px;
+}
+
+.contents > .contents-box{
+	width:700px;
 }
 
 footer{
