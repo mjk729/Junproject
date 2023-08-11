@@ -15,7 +15,6 @@ public class Post {
 	private String content;
 	private String tag;
 	private String imagePath;
-	private String videoPath;
 	private Date createdAt;
 	private Date updatedAt;
 	

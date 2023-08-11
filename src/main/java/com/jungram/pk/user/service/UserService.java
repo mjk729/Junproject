@@ -51,4 +51,9 @@ public class UserService {
 
 	}
 
+	public User getUser(int id) {
+		User user = userRepository.findById(id).orElse(null);
+		return user;
+	}
+	
 }

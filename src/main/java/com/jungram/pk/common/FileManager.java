@@ -6,6 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 public class FileManager {
@@ -14,7 +17,10 @@ public class FileManager {
 	
 	public static String saveFile(int userId, MultipartFile file) {
 		
+		Logger logger = LoggerFactory.getLogger(FileManager.class);
+		
 		if(file == null) {
+			logger.error("saveFile :: 파일 저장 에러");
 			return null;
 		}
 		
@@ -25,13 +31,16 @@ public class FileManager {
 		File directory = new File(directoryPath);
 		
 		if(!directory.mkdir()) {
+			logger.error("saveFile :: 디렉토리 생성 에러 - 경로 : " + directoryPath);
 			return null;
 		}
+		
+		String filePath = null;
 		
 		try {
 			byte[] bytes = file.getBytes();
 			
-			String filePath = directoryPath + file.getOriginalFilename();
+			filePath = directoryPath + file.getOriginalFilename();
 			
 			Path path = Paths.get(filePath);
 			
@@ -39,12 +48,14 @@ public class FileManager {
 			
 		} catch (IOException e) {
 			
+			logger.error("saveFile :: 파일 저장 에러 - 경로 :" + filePath);
+			
 			e.printStackTrace();
 			
 			return null;
 		}
 		
-		return "/images/" + directoryName + file.getOriginalFilename();
+		return "/images" + directoryName + file.getOriginalFilename();
 		
 	}
 	

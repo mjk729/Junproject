@@ -20,4 +20,8 @@ public interface PostRepository {
 	
 	public List<Post> selectPostList();
 	
+	public int insertComment(
+			@Param("userId") int userId
+			,@Param("comment") String comment);
+	
 }

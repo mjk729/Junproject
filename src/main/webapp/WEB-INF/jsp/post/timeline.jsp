@@ -24,7 +24,7 @@
             		<div class="d-flex justify-content-between p-2">
             			<i class="bi bi-file-earmark-image-fill image-icon-size" id="imageIcon"></i>
             			<input type="file" id="fileInput" class="d-none">
-            			<button type="button" class="btn btn-info btn-sm" id="createBtn">업로드</button>
+            			<button type="button" class="btn btn-info btn-sm" id="uploadBtn">업로드</button>
             		</div>
             	</div>
             	<!-- /입력박스 -->
@@ -34,7 +34,7 @@
             		<!-- 카드 -->
             		<div class="card my-3">
             			<div class="d-flex justify-content-between p-2">
-            				<div>${post.userId }</div>
+            				<div>${post.loginId }</div>
             				<i class="bi bi-three-dots"></i>
             			</div>
             			<div>${post.title }</div>
@@ -43,12 +43,14 @@
             			</div>
             			<div class="d-flex justify-content-between p-2">
             				<b>${post.tag }</b>
+            				<div>
             				<i class="bi bi-suit-heart-fill"></i> 좋아요 12개
+            				</div>
             			</div>
-            			<div>
-            				<b>${post.userId }</b>${post.content }
+            			<div class="ml-2">
+            				${post.content }
             			</div>
-            			
+            		
             			<!-- 댓글 박스 -->
             			<div class="comment-box small">
             				<div class="p-2">댓글</div>
@@ -60,8 +62,8 @@
             				</div>
             				
             				<div class="d-flex">
-            					<input type="text" class="form-control">
-            					<button type="button" class="btn btn-info">게시</button>
+            					<input type="text" class="form-control" id="commentInput">
+            					<button type="button" class="btn btn-info" id="commentBtn">게시</button>
             				</div>
             			</div>
             			<!-- /댓글 박스 -->
@@ -87,7 +89,38 @@
     			// file input을 클릭한것과 똑같은 
     			$("#fileInput").click();
     			
-    			$("#createBtn").on("click", function(){
+    		});
+    		
+    		$("#commentBtn").on("click", function(){
+    			let comment = $("#commentInput").val();
+    			
+    			if(comment == ""){
+    				alert("작성할 댓글을 입력하세요");
+    				return;
+    			}
+    			
+    			$.ajax({
+					type:"post"
+					,url:"/post/comment"
+					,data:{"comment" : comment}
+					,success:function(data){
+						if(data.result == "success"){
+							location.reload();
+						} else{
+							alert("댓글 작성 실패");
+						}
+						
+					}
+					,error:function(){
+						alert("댓글 작성 에러")
+					}
+				});
+    			
+    		})
+    		
+    		
+    		
+    			$("#uploadBtn").on("click", function(){
     				let title = $("#titleInput").val();
     				let content = $("#contentInput").val();
     				
@@ -103,7 +136,13 @@
     					alert("내용을 입력하세요");
     					return;
     				}
+    					/* 파일이 선택되지 않은 경우 유효성 검사
+    				if(file.files.length == 0){
+    					alert("파일을 선택하세요");
+    					return;
+    				} */
     				
+    				// 파일 형식이 있음으로 폼 형식으로
     				var formData = new FormData();
     				formData.append("title", title);
     				formData.append("content", content);
@@ -119,7 +158,7 @@
     					,contentType:false
     					,success:function(data){
     						if(data.result == "success"){
-    							location.reload("/post/timeline-view");
+    							location.reload();
     						} else{
     							alert("게시물 작성 실패");
     						}
@@ -128,11 +167,11 @@
     					,error:function(){
     						alert("게시물 작성 에러")
     					}
-    				})
+    				});
     				
     			});
     			
-    		});
+    		
     	});
     </script>
     
