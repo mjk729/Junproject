@@ -37,14 +37,15 @@
             				<div>${post.loginId }</div>
             				<i class="bi bi-three-dots"></i>
             			</div>
-            			<div>${post.title }</div>
+            			<div class="ml-2"> ${post.title }</div>
             			<div>
             				<img class="w-100"src="${post.imagePath }">
             			</div>
             			<div class="d-flex justify-content-between p-2">
             				<b>${post.tag }</b>
             				<div>
-            				<i class="bi bi-suit-heart-fill"></i> 좋아요 12개
+            				${post.like }
+            				<i data-post-id="${post.id }" class="bi bi-heart like-btn"></i> 좋아요 ${post.likeCount }개
             				</div>
             			</div>
             			<div class="ml-2">
@@ -54,16 +55,15 @@
             			<!-- 댓글 박스 -->
             			<div class="comment-box small">
             				<div class="p-2">댓글</div>
+            				<c:forEach var="comment" items="${post.commentList }">
             				<div>
-            					<b>아이디3</b> 댓글 2
+            					<b>${comment.loginId} </b> ${comment.comment }
             				</div>
-            				<div>
-            					<b>아이디4</b> 댓글 3
-            				</div>
+            				</c:forEach>
             				
             				<div class="d-flex">
-            					<input type="text" class="form-control" id="commentInput">
-            					<button type="button" class="btn btn-info" id="commentBtn">게시</button>
+            					<input type="text" class="form-control" id="commentInput${post.id }">
+            					<button type="button" class="btn btn-info comment-btn" data-post-id="${post.id }">게시</button>
             				</div>
             			</div>
             			<!-- /댓글 박스 -->
@@ -85,14 +85,40 @@
     
     <script>
     	$(document).ready(function(){
+    		
+    		$(".like-btn").on("click", function(){
+    			
+    			// 좋아요한 대상 게시글 id
+    			let postId = $(this).data("post-id");
+    			
+    			$.ajax({
+    				type:"post"
+    				,url:"/post/like"
+    				,data:{"postId":postId}
+    				,success:function(data){
+    					if(data.result == "success"){
+    						location.reload();
+    					}else{
+    						alert("좋아요 실패")
+    					}
+    				}
+    				,error:function(){
+    					alert("좋아요 에러")
+    				}
+    			});
+    			
+    		});
+    		
     		$("#imageIcon").on("click", function(){
     			// file input을 클릭한것과 똑같은 
     			$("#fileInput").click();
     			
     		});
     		
-    		$("#commentBtn").on("click", function(){
-    			let comment = $("#commentInput").val();
+    		$(".comment-btn").on("click", function(){
+    			let postId = $(this).data("post-id");
+    			//let comment = $("#commentInput" + postId).val();
+    			let comment = $(this).prev().val();
     			
     			if(comment == ""){
     				alert("작성할 댓글을 입력하세요");
@@ -101,8 +127,8 @@
     			
     			$.ajax({
 					type:"post"
-					,url:"/post/comment"
-					,data:{"comment" : comment}
+					,url:"/post/comment/create"
+					,data:{"comment" : comment, "postId" : postId}
 					,success:function(data){
 						if(data.result == "success"){
 							location.reload();
@@ -116,7 +142,7 @@
 					}
 				});
     			
-    		})
+    		});
     		
     		
     		

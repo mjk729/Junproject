@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.jungram.pk.comment.repository.CommentRepository">
+  	<insert id="insertComment"
+  	parameterType="map">
+  		insert into
+  			comment
+  		(
+  			postId
+  			,userId
+  			,comment
+  		)
+  		value
+  		(
+  			#{postId}
+  			,#{userId}
+  			,#{comment}
+  		)
+  	</insert>
+  	
+  	<select id="selectCommentByPostId"
+  	parameterType="int"
+  	resultType="com.jungram.pk.comment.domain.Comment">
+  		select
+  			id
+  			,postId
+  			,userId
+  			,comment
+  			,createdAt
+  			,updatedAt
+  		from
+  			comment
+  		where
+  			postId = #{postId}
+  	</select>
+  	
+  </mapper>

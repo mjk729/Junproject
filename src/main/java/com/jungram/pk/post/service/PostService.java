@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.jungram.pk.comment.domain.Comment;
+import com.jungram.pk.comment.service.CommentService;
 import com.jungram.pk.common.FileManager;
+import com.jungram.pk.like.service.LikeService;
 import com.jungram.pk.post.domain.Post;
 import com.jungram.pk.post.dto.PostDetail;
 import com.jungram.pk.post.repository.PostRepository;
@@ -23,6 +26,12 @@ public class PostService {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private LikeService likeService;
+	
+	@Autowired
+	private CommentService commentService;
+	
 	public int addPost(int userId, String title, String content,String tag, MultipartFile file) {
 		
 		String imagePath = FileManager.saveFile(userId, file);
@@ -30,7 +39,7 @@ public class PostService {
 		return postRepository.insertPost(userId, title, content, tag, imagePath);
 	}
 	
-	public List<PostDetail> getPostList(){
+	public List<PostDetail> getPostList(int userId){
 		
 		List<Post> postList = postRepository.selectPostList();
 		
@@ -38,6 +47,12 @@ public class PostService {
 		for(Post post:postList) {
 			
 			User user = userService.getUser(post.getUserId());
+			
+			int likeCount = likeService.getCountByPostId(post.getId());
+			
+			List<Comment> commentList = commentService.getCommentByPostId(post.getId());
+			
+			boolean isLike= likeService.isLike(post.getId(), userId);
 			
 			PostDetail postDetail = PostDetail.builder()
 									.id(post.getId())
@@ -47,6 +62,9 @@ public class PostService {
 									.imagePath(post.getImagePath())
 									.userId(post.getUserId())
 									.loginId(user.getLoginId())
+									.likeCount(likeCount)
+									.commentList(commentList)
+									.isLike(isLike)
 									.build();
 			postDetailList.add(postDetail);
 		}
@@ -57,5 +75,6 @@ public class PostService {
 		
 		return postRepository.insertComment(userId, comment);
 	}
+	
 	
 }

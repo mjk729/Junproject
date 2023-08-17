@@ -4,5 +4,39 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
   <mapper namespace="com.jungram.pk.like.repository.LikeRepository">
-  
+  	<insert id="insertLike" parameterType="map">
+  		insert into
+  			`like`
+  		(
+  			`userId`,
+  			`postId`
+  		)
+  		value
+  		(
+  			#{userId}
+  			,#{postId}
+  		)
+  	</insert>
+  	
+  	<select id="selectCountByPostId" parameterType="int" resultType="int">
+  		select
+  			count(1)
+  		from 
+  			`like`
+  		where 
+  			postId = #{postId}
+  	</select>
+  	
+  	<select id="selectCountByPostIdUserId"
+  	parameterType="map"
+  	resultType="int">
+  	select
+  		count(1)
+  	from
+  		like
+  	where
+  		postId = #{postId} and userId = #{userId}
+  	
+  	</select>
+  	
   </mapper>
