@@ -56,4 +56,9 @@ public class UserService {
 		return user;
 	}
 	
+
+	public String getloginId(String loginId) {
+		return userRepository.findByLoginId(loginId);
+	}
+	
 }

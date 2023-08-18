@@ -21,15 +21,14 @@ public class CommentService {
 	@Autowired
 	private UserService userService;
 	
-	public int addComment(int postId, int userId, String comment) {
-
-		return commentRepository.insertComment(postId, userId, comment);
-
+	public int addComment(int postId, int userId, String content) {
+		return commentRepository.insertComment(postId, userId, content);
 	}
 	
-	public List<Comment> getCommentByPostId(int postId){
+	public List<CommentDetail> getCommentByPostId(int postId) {
 		
 		List<Comment> commentList = commentRepository.selectCommentByPostId(postId);
+		
 		
 		List<CommentDetail> commentDetailList = new ArrayList<>();
 		for(Comment comment:commentList) {
@@ -45,12 +44,12 @@ public class CommentService {
 			
 			commentDetailList.add(commentDetail);
 		}
+		
 		return commentDetailList;
 	}
-
 	
-
-		
-	
+	public int deleteCommentByPostId(int postId) {
+		return commentRepository.deleteCommentByPostId(postId);
+	}
 	
 }

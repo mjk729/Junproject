@@ -14,4 +14,6 @@ public interface UserRepository extends JpaRepository<User, Integer>{
 	
 	// SELECT count(1) ...  WHERE `loginId` = #{loginId};
 		public int countByLoginId(String loginId);
+		
+		public String findByLoginId(String loginId);
 }

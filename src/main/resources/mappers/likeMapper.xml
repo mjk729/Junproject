@@ -33,10 +33,25 @@
   	select
   		count(1)
   	from
-  		like
+  		`like`
   	where
   		postId = #{postId} and userId = #{userId}
   	
   	</select>
+  	
+  	<delete id="deleteLike" parameterType="map">
+  	delete from
+  		`like`
+  	where
+  		postId = #{postId} and userId = #{userId}
+  	
+  	</delete>
+  	
+  	<delete id="deleteLikeByPostId" parameterType="int">
+  		delete from
+  			`like`
+  		where
+  			postId = #{postId}
+  	</delete>
   	
   </mapper>

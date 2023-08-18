@@ -35,7 +35,9 @@
             		<div class="card my-3">
             			<div class="d-flex justify-content-between p-2">
             				<div>${post.loginId }</div>
-            				<i class="bi bi-three-dots"></i>
+            				<c:if test="${post.userId == userId }">
+            				<i data-post-id="${post.id }" class="bi bi-three-dots more-btn" data-toggle="modal" data-target="#moreModal"></i>
+            				</c:if>
             			</div>
             			<div class="ml-2"> ${post.title }</div>
             			<div>
@@ -44,8 +46,17 @@
             			<div class="d-flex justify-content-between p-2">
             				<b>${post.tag }</b>
             				<div>
-            				${post.like }
-            				<i data-post-id="${post.id }" class="bi bi-heart like-btn"></i> 좋아요 ${post.likeCount }개
+            				<c:choose>
+								<c:when test="${post.like }">
+									<%-- 채워진 하트 아이콘 --%>
+									<i data-post-id="${post.id }" class="bi bi-heart-fill text-danger unlike-btn"></i>
+								</c:when>
+								<c:otherwise>
+									<%-- 비워진 하트 아이콘 --%>
+									<i data-post-id="${post.id }" class="bi bi-heart like-btn"></i>
+								</c:otherwise>
+							</c:choose>
+            				 좋아요 ${post.likeCount }개
             				</div>
             			</div>
             			<div class="ml-2">
@@ -56,7 +67,7 @@
             			<div class="comment-box small">
             				<div class="p-2">댓글</div>
             				<c:forEach var="comment" items="${post.commentList }">
-            				<div>
+            				<div class="ml-2 pb-1">
             					<b>${comment.loginId} </b> ${comment.comment }
             				</div>
             				</c:forEach>
@@ -79,12 +90,77 @@
         </section>
         <c:import url="/WEB-INF/jsp/include/footer.jsp" />
     </div>
+    
+<!-- Modal -->
+<div class="modal fade" id="moreModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-body text-center">
+        <a href="#" id="deleteBtn">삭제하기</a>
+      </div>
+     
+    </div>
+  </div>
+</div>
+    
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     
     <script>
     	$(document).ready(function(){
+    		
+    		$("#deleteBtn").on("click", function(){
+    			
+    			let postId = $(this).data("post-id");
+    			
+    			$.ajax({
+    				type:"delete"
+    				,url:"/post/delete"
+    				,data:{"postId":postId}
+    				,success:function(data){
+    					if(data.result == "success"){
+    						location.reload();
+    					} else{
+    						alert("삭제 실패");
+    					}
+    				}
+    				,error:function(){
+    					alert("삭제 에러");
+    				}
+    			});
+    			
+    			
+    		});
+    		
+    		
+    		$(".more-btn").on("click", function(){
+    			let postId = $(this).data("post-id");
+    			
+    			$("#deleteBtn").data("post-id", postId);
+    			
+    		});
+    		
+    		$(".unlike-btn").on("click", function(){
+    			let postId = $(this).data("post-id");
+    			
+    			$.ajax({
+    				type:"delete"
+    				,url:"/post/unlike"
+    				,data:{"postId":postId}
+    			,success:function(data){
+    				if(data.result == "success"){
+    					location.reload();
+    				}else{
+    					alert("좋아요 취소 실패")
+    				}
+    			}
+    			,error:function(){
+    				alert("좋아요 취소 에러")
+    			}
+    			});
+    		});
     		
     		$(".like-btn").on("click", function(){
     			

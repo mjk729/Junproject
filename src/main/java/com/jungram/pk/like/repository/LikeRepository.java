@@ -16,6 +16,10 @@ public interface LikeRepository {
 	// 특정 postId 에 특정 userId로 기록된 행 조회
 		public int selectCountByPostIdUserId(
 				@Param("postId") int postId
-				,@Param("UserId") int UserId
+				,@Param("userId") int userId
 				);
+		
+	public int deleteLike(@Param("postId") int postId, @Param("userId") int userId);
+	
+	public int deleteLikeByPostId(@Param("postId") int postId);
 }

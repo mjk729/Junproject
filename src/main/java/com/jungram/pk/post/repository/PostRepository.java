@@ -18,10 +18,9 @@ public interface PostRepository {
 			,@Param("imagePath") String imagePath					
 			);
 	
+	public Post selectPost(@Param("id") int id);
 	public List<Post> selectPostList();
 	
-	public int insertComment(
-			@Param("userId") int userId
-			,@Param("comment") String comment);
+	public int deletePost(@Param("postId") int postId);
 	
 }

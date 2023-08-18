@@ -37,4 +37,11 @@
   			postId = #{postId}
   	</select>
   	
+  	<delete id="deleteCommentByPostId" parameterType="int">
+  		delete from
+  			comment
+  		where
+  			postId = #{postId}
+  	</delete>
+  	
   </mapper>

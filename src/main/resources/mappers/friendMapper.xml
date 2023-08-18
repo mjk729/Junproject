@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.jungram.pk.friend.repository.FriendRepository">
+  	<insert id="insertFriend" parameterType="map">
+  		insert into
+  			friend
+  		(
+  			loginId
+  			,name
+  		)
+  		value
+  		(
+  			#{loginId}
+  			,#{name}
+  		)
+  	</insert>
+  	
+  	<select id="selectFriendByLoginId" parameterType="int"
+  	resultType="String">
+  		select
+  			loginId
+  			,name
+  		from
+  			friend
+  		where
+  			loginId = #{loginId}
+  	</select>
+  	
+  </mapper>

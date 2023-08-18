@@ -43,5 +43,27 @@
 			id desc
   	</select>
   	
+  	<select id="selectPost" parameterType="int" resultType="com.jungram.pk.post.domain.Post">
+  		select
+  			id
+  			,userId
+  			,title
+  			,content
+  			,tag
+  			,imagePath
+  			,createdAt
+			,updatedAt
+		from
+			post
+		where
+			id = #{id}
+  	</select>
+  	
+  	<delete id="deletePost" parameterType="int">
+  		delete from
+  			post
+  		where
+  			id = #{postId}
+  	</delete>
   </mapper>
   
